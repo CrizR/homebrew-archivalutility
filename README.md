@@ -21,6 +21,13 @@ vim ~/.bash_profile
 alias archiveutil="python3 /Users/[USERNAME]/archival-utility/run.py"
 
 replace [USERNAME] with your username
+
+(press escape and colon (:) then type wq and press enter)
+
+now enter
+
+. ~/.bash_profile
+
 ```
 
 	
@@ -39,7 +46,12 @@ cd folder1
 
 ```
    
-archiveutil -p (directory_you_intend_to_archive) -ap (prefix to your asset) -sn (source)
+archiveutil -p (directory_you_intend_to_archive) -sn (source) 
+
+optional arguments:
+
+-ap (prefix to your asset)
+-dp (prefix to archived directories) (i.e PREFIXdirectoryName, __directoryName, ...etc)
 
 ```
 
