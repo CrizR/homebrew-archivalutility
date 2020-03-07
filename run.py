@@ -57,9 +57,8 @@ class ArchiveUtility(object):
                 csv_writer.writerow([old_name, new_name, old_path, new_location])
                 self.asset_number += 1
                 ArchiveUtility.print_progress_bar(index, len(files_to_change))
-            shutil.make_archive(self.OUTPUT_FILE + "-" + now, 'zip', self.OUTPUT_FILE)
             self.clean(csvfile, "Finished. Your archived files can be found in "
-                       + self.OUTPUT_FILE + "-" + now + ".zip and your csv in "
+                       + self.OUTPUT_FILE + "-" + now + "/ and your csv in "
                        + self.OUTPUT_FILE + "-" + now + ".csv")
         except Exception as e:
             self.clean(csvfile, "Error: " + str(e))
