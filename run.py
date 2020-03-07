@@ -34,7 +34,6 @@ class ArchiveUtility(object):
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
             ArchiveUtility.create_dir(self.OUTPUT_FILE)
             path = os.getcwd() + self.directory + self.file_del + "**"
-            print("Searching for files...")
             files_to_change = list(filter(lambda x: not os.path.isdir(x), glob.glob(path,
                                                                                     recursive=True)))
             csv_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
@@ -124,7 +123,7 @@ class ArchiveUtility(object):
         print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end=print_end)
         # Print New Line on Complete
         if iteration == total:
-            print()
+            print("00111100 00110011 01000101 01101100 01101100 01100101")
 
 
 if __name__ == '__main__':
