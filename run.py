@@ -36,6 +36,8 @@ class ArchiveUtility(object):
             path = os.getcwd() + self.directory + self.file_del + "**"
             files_to_change = list(filter(lambda x: not os.path.isdir(x), glob.glob(path,
                                                                                     recursive=True)))
+            for file in files_to_change:
+                print("Found: " + file)
             csv_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
                                     quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", "Archive Directory"])
@@ -61,11 +63,10 @@ class ArchiveUtility(object):
                 old_path = self.file_del.join(fsplit[4:-1])
                 csv_writer.writerow([old_name, new_name, old_path, new_location])
                 self.asset_number += 1
-                ArchiveUtility.print_progress_bar(index, len(files_to_change))
-                print("00111100 00110011 01000011 01101000 01110010 01101001 01110011")
+                ArchiveUtility.print_progress_bar(index + 1, len(files_to_change))
             self.clean(csvfile, "Finished. Your archived files can be found in "
                        + self.OUTPUT_FILE + "-" + now + "/ and your csv in "
-                       + csv_filename)
+                       + csv_filename + " || 00111100 00110011")
         except Exception as e:
             os.remove(csv_filename)
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
