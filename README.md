@@ -46,7 +46,7 @@ cd folder1
 
 ```
    
-archiveutil -p (directory_you_intend_to_archive) -sn (source) 
+archiveutil -dir (directory_you_intend_to_archive) -sn (source) 
 
 optional arguments:
 
