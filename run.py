@@ -39,7 +39,7 @@ class ArchiveUtility(object):
             csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", "Archive Directory"])
             if not files_to_change:
                 self.clean(csvfile, "No files to archive found in: " + self.path)
-            for f_name in files_to_change:
+            for index, f_name in enumerate(files_to_change):
                 old_name = f_name.split(self.file_del)[-1]
                 old_dir = f_name.split(self.file_del)[-2]
                 new_name = self.rename_file(old_name)
@@ -56,6 +56,7 @@ class ArchiveUtility(object):
                 old_path = self.file_del.join(f_name.split(self.file_del)[4:-1])
                 csv_writer.writerow([old_name, new_name, old_path, new_location])
                 self.asset_number += 1
+                ArchiveUtility.print_progress_bar(index, len(files_to_change))
             shutil.make_archive(self.OUTPUT_FILE + "-" + now, 'zip', self.OUTPUT_FILE)
             self.clean(csvfile, "Finished. Your archived files can be found in "
                        + self.OUTPUT_FILE + "-" + now + ".zip and your csv in "
@@ -78,6 +79,28 @@ class ArchiveUtility(object):
     def rm_dir(dir_name):
         if os.path.exists(dir_name):
             shutil.rmtree(dir_name)
+
+    @staticmethod
+    def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', print_end="\r"):
+        """
+        Call in a loop to create terminal progress bar
+        @params:
+            iteration   - Required  : current iteration (Int)
+            total       - Required  : total iterations (Int)
+            prefix      - Optional  : prefix string (Str)
+            suffix      - Optional  : suffix string (Str)
+            decimals    - Optional  : positive number of decimals in percent complete (Int)
+            length      - Optional  : character length of bar (Int)
+            fill        - Optional  : bar fill character (Str)
+            printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+        """
+        percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+        filled_length = int(length * iteration // total)
+        bar = fill * filled_length + '-' * (length - filled_length)
+        print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end=print_end)
+        # Print New Line on Complete
+        if iteration == total:
+            print()
 
 
 if __name__ == '__main__':
