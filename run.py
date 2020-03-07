@@ -4,6 +4,7 @@ import argparse
 import shutil
 import csv
 import os
+import time
 
 
 class ArchiveUtility(object):
@@ -30,7 +31,7 @@ class ArchiveUtility(object):
                                                                                     recursive=True)))
             csv_writer = csv.writer(self.csvfile, delimiter=',', quotechar='|',
                                     quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow(["Original Name", "Archive Name", "Original Directory"])
+            csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", ["Archive Directory"]])
             if not files_to_change:
                 self.clean("No files to archive found in: " + self.path)
             for f_name in files_to_change:
@@ -42,9 +43,9 @@ class ArchiveUtility(object):
                 ArchiveUtility.create_dir(new_dir)
                 copyfile(f_name, new_location)
                 old_path = self.file_del.join(f_name.split(self.file_del)[4:-1])
-                csv_writer.writerow([old_name, new_name, old_path])
+                csv_writer.writerow([old_name, new_name, old_path, new_location])
                 self.asset_number += 1
-            shutil.make_archive(self.OUTPUT_FILE, 'zip', self.OUTPUT_FILE)
+            shutil.make_archive(self.OUTPUT_FILE + "-" + str(time.time()), 'zip', self.OUTPUT_FILE)
             self.clean("Finished. Your archived files can be found in " + self.OUTPUT_FILE + ".zip")
         except Exception as e:
             self.clean("Error: " + str(e))
