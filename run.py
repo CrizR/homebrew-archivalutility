@@ -10,10 +10,11 @@ import time
 class ArchiveUtility(object):
     OUTPUT_FILE = 'archive'
 
-    def __init__(self, path, ap, sn, file_del):
+    def __init__(self, path, ap, sn, dp, file_del):
         self.path = path
         self.ap = ap
         self.sn = sn
+        self.dp = dp
         self.asset_number = 1000
         self.csvfile = open(self.OUTPUT_FILE + ".csv", "w+")
         self.file_del = file_del
@@ -39,7 +40,7 @@ class ArchiveUtility(object):
                 old_dir = f_name.split(self.file_del)[-2]
                 new_name = self.rename_file(old_name)
                 new_location = self.OUTPUT_FILE + self.file_del + old_dir + self.file_del + new_name
-                new_dir = self.OUTPUT_FILE + self.file_del + old_dir
+                new_dir = (self.dp if self.dp else "") + self.OUTPUT_FILE + self.file_del + old_dir
                 ArchiveUtility.create_dir(new_dir)
                 copyfile(f_name, new_location)
                 old_path = self.file_del.join(f_name.split(self.file_del)[4:-1])
@@ -76,6 +77,7 @@ if __name__ == '__main__':
                                              'subdirectories)', required=True)
     parser.add_argument('-ap', '--assetPrefix', help='Prefix to asset number', required=False)
     parser.add_argument('-sn', '--sourceName', help='Name of Source', required=True)
+    parser.add_argument('-dp', '--directoryPrefix', help='Prefix for archived directories', required=False)
     args = parser.parse_args()
 
-    ArchiveUtility(args.path, args.assetPrefix, args.sourceName, file_del).run()
+    ArchiveUtility(args.path, args.assetPrefix, args.sourceName, args.directoryPrefix, file_del).run()
