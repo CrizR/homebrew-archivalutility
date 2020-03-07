@@ -42,6 +42,7 @@ class ArchiveUtility(object):
             csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", "Archive Directory"])
             if not files_to_change:
                 os.remove(csv_filename)
+                ArchiveUtility.rm_dir(self.OUTPUT_FILE)
                 self.clean(csvfile, "No file s to archive found in: " + self.directory)
             for index, f_name in enumerate(files_to_change):
                 fsplit = f_name.split(self.file_del)
@@ -67,6 +68,7 @@ class ArchiveUtility(object):
                        + csv_filename)
         except Exception as e:
             os.remove(csv_filename)
+            ArchiveUtility.rm_dir(self.OUTPUT_FILE)
             self.clean(csvfile, "Error: " + str(e))
 
     def create_directories(self, dir_set):
@@ -88,7 +90,6 @@ class ArchiveUtility(object):
 
     def clean(self, file, msg):
         print(msg)
-        ArchiveUtility.rm_dir(self.OUTPUT_FILE)
         file.close()
         exit(0)
 
