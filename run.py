@@ -31,7 +31,7 @@ class ArchiveUtility(object):
                                                                                     recursive=True)))
             csv_writer = csv.writer(self.csvfile, delimiter=',', quotechar='|',
                                     quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", ["Archive Directory"]])
+            csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", "Archive Directory"])
             if not files_to_change:
                 self.clean("No files to archive found in: " + self.path)
             for f_name in files_to_change:
