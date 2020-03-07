@@ -1,4 +1,4 @@
-import glob
+from glob import glob
 from shutil import copyfile
 import argparse
 import shutil
@@ -34,10 +34,8 @@ class ArchiveUtility(object):
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
             ArchiveUtility.create_dir(self.OUTPUT_FILE)
             path = os.getcwd() + self.directory + self.file_del + "**"
-            files_to_change = list(filter(lambda x: not os.path.isdir(x), glob.glob(path,
+            files_to_change = list(filter(lambda x: not os.path.isdir(x), glob(path,
                                                                                     recursive=True)))
-            for file in files_to_change:
-                print("Found: " + file)
             csv_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
                                     quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", "Archive Directory"])
