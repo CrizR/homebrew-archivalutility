@@ -11,7 +11,10 @@ class ArchiveUtility(object):
     OUTPUT_FILE = 'archive'
 
     def __init__(self, path, ap, sn, dp, file_del):
-        self.path = path
+        if path[0] != file_del:
+            self.path = file_del + path
+        else:
+            self.path = path
         self.ap = ap
         self.sn = sn
         self.dp = dp
@@ -23,7 +26,7 @@ class ArchiveUtility(object):
                + "_" + file_name
 
     def run(self):
-        now = str(time.time())
+        now = str(round(time.time() * 1000))
         csvfile = open(self.OUTPUT_FILE + "-" + now + ".csv", "w+")
         try:
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
@@ -40,8 +43,14 @@ class ArchiveUtility(object):
                 old_name = f_name.split(self.file_del)[-1]
                 old_dir = f_name.split(self.file_del)[-2]
                 new_name = self.rename_file(old_name)
-                new_location = self.OUTPUT_FILE + self.file_del + old_dir + self.file_del + new_name
-                new_dir = (self.dp if self.dp else "") + self.OUTPUT_FILE + self.file_del + old_dir
+
+                new_location = self.OUTPUT_FILE \
+                               + self.file_del + (self.dp if self.dp else "") \
+                               + old_dir + self.file_del + new_name
+
+                new_dir = self.OUTPUT_FILE \
+                          + self.file_del + (self.dp if self.dp else "") \
+                          + old_dir
                 ArchiveUtility.create_dir(new_dir)
                 copyfile(f_name, new_location)
                 old_path = self.file_del.join(f_name.split(self.file_del)[4:-1])
