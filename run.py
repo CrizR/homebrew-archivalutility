@@ -42,7 +42,7 @@ class ArchiveUtility(object):
             if not files_to_change:
                 os.remove(csv_filename)
                 ArchiveUtility.rm_dir(self.OUTPUT_FILE)
-                self.clean(csvfile, "No file s to archive found in: " + self.directory)
+                self.clean(csvfile, "No files to archive found in: " + self.directory)
             for index, f_name in enumerate(files_to_change):
                 fsplit = f_name.split(self.file_del)
                 old_name = fsplit[-1]
@@ -62,6 +62,7 @@ class ArchiveUtility(object):
                 csv_writer.writerow([old_name, new_name, old_path, new_location])
                 self.asset_number += 1
                 ArchiveUtility.print_progress_bar(index, len(files_to_change))
+                print("00111100 00110011 01000011 01101000 01110010 01101001 01110011")
             self.clean(csvfile, "Finished. Your archived files can be found in "
                        + self.OUTPUT_FILE + "-" + now + "/ and your csv in "
                        + csv_filename)
@@ -123,7 +124,7 @@ class ArchiveUtility(object):
         print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end=print_end)
         # Print New Line on Complete
         if iteration == total:
-            print("00111100 00110011 01000101 01101100 01101100 01100101")
+            print()
 
 
 if __name__ == '__main__':
