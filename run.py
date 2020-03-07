@@ -16,7 +16,6 @@ class ArchiveUtility(object):
         self.sn = sn
         self.dp = dp
         self.asset_number = 1000
-        self.csvfile = open(self.OUTPUT_FILE + ".csv", "w+")
         self.file_del = file_del
 
     def rename_file(self, file_name):
@@ -24,17 +23,19 @@ class ArchiveUtility(object):
                + "_" + file_name
 
     def run(self):
+        now = str(time.time())
+        csvfile = open(self.OUTPUT_FILE + "-" + now + ".csv", "w+")
         try:
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
             ArchiveUtility.create_dir(self.OUTPUT_FILE)
             path = os.getcwd() + self.path + self.file_del + "**"
             files_to_change = list(filter(lambda x: not os.path.isdir(x), glob.glob(path,
                                                                                     recursive=True)))
-            csv_writer = csv.writer(self.csvfile, delimiter=',', quotechar='|',
+            csv_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
                                     quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow(["Original Name", "Archive Name", "Original Directory", "Archive Directory"])
             if not files_to_change:
-                self.clean("No files to archive found in: " + self.path)
+                self.clean(csvfile, "No files to archive found in: " + self.path)
             for f_name in files_to_change:
                 old_name = f_name.split(self.file_del)[-1]
                 old_dir = f_name.split(self.file_del)[-2]
@@ -46,15 +47,17 @@ class ArchiveUtility(object):
                 old_path = self.file_del.join(f_name.split(self.file_del)[4:-1])
                 csv_writer.writerow([old_name, new_name, old_path, new_location])
                 self.asset_number += 1
-            shutil.make_archive(self.OUTPUT_FILE + "-" + str(time.time()), 'zip', self.OUTPUT_FILE)
-            self.clean("Finished. Your archived files can be found in " + self.OUTPUT_FILE + ".zip")
+            shutil.make_archive(self.OUTPUT_FILE + "-" + now, 'zip', self.OUTPUT_FILE)
+            self.clean(csvfile, "Finished. Your archived files can be found in "
+                       + self.OUTPUT_FILE + "-" + now + ".zip and your csv in "
+                       + self.OUTPUT_FILE + "-" + now + ".csv")
         except Exception as e:
-            self.clean("Error: " + str(e))
+            self.clean(csvfile, "Error: " + str(e))
 
-    def clean(self, msg):
+    def clean(self, file, msg):
         print(msg)
         ArchiveUtility.rm_dir(self.OUTPUT_FILE)
-        self.csvfile.close()
+        file.close()
         exit(0)
 
     @staticmethod
