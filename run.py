@@ -1,5 +1,5 @@
 from glob import glob
-from shutil import copyfile
+from shutil import copyfile, move
 import argparse
 import shutil
 import csv
@@ -11,7 +11,7 @@ import json
 class ArchiveUtility(object):
     OUTPUT_FILE = 'archive'
 
-    def __init__(self, directory, ap, sn, dp, file_del, csv_path, oc, dc):
+    def __init__(self, directory, ap, sn, dp, file_del, csv_path, oc, dc, force=False):
         if directory[0] != file_del:
             self.directory = file_del + directory
         else:
@@ -28,6 +28,7 @@ class ArchiveUtility(object):
         self.csv_path = csv_path
         self.oc = int(oc)
         self.dc = int(dc)
+        self.force = force
         self.created_dirs = {}
 
     def rename_file(self, file_name):
@@ -56,7 +57,8 @@ class ArchiveUtility(object):
             file.writelines(json.dumps(name_map))
         try:
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
-            ArchiveUtility.create_dir(self.OUTPUT_FILE)
+            if not self.force:
+                ArchiveUtility.create_dir(self.OUTPUT_FILE)
             path = os.getcwd() + self.directory + self.file_del + "**"
             files_to_change = list(filter(lambda x: not os.path.isdir(x), glob(path, recursive=True)))
             if not files_to_change:
@@ -74,14 +76,19 @@ class ArchiveUtility(object):
                         old_name = old_name.split(".")[0]
                     new_name = name_map[old_name]
                     new_location = self.OUTPUT_FILE + self.file_del + old_dirs + self.file_del + new_name
-                    if old_dirs not in self.created_dirs:
-                        self.create_directories(old_dirs_set)
-                    copyfile(f_name, new_location)
-                    print("TEST")
-                    self.asset_number += 1
+                    if self.force:
+                        location = old_dirs + self.file_del + new_name
+                        shutil.move(f_name, location)
+                    else:
+                        if old_dirs not in self.created_dirs:
+                            self.create_directories(old_dirs_set)
+                        copyfile(f_name, new_location)
                     ArchiveUtility.print_progress_bar(index + 1, len(files_to_change))
-            self.clean(csvfile, "Finished. Your archived files can be found in "
-                       + self.OUTPUT_FILE + "-" + now + "|| 00111100 00110011")
+            if self.force:
+                self.clean(csvfile, "Finished. Your files are archived")
+            else:
+                self.clean(csvfile, "Finished. Your archived files can be found in "
+                           + self.OUTPUT_FILE + "-" + now + "|| 00111100 00110011")
         except Exception as e:
             ArchiveUtility.rm_dir(self.OUTPUT_FILE)
             self.clean(csvfile, "Error: " + str(e))
@@ -209,7 +216,10 @@ if __name__ == '__main__':
                         default=None,
                         required=False)
 
+    parser.add_argument("-f", "--force", default=False,
+                        help="Renames the given directories files rather than copying them over")
+
     args = parser.parse_args()
 
     ArchiveUtility(args.directory, args.assetPrefix, args.sourceName, args.directoryPrefix, file_del,
-                   args.csvPath, args.originalColumn, args.destinationColumn).run()
+                   args.csvPath, args.originalColumn, args.destinationColumn, args.force).run()
