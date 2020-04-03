@@ -65,6 +65,8 @@ class ArchiveUtility(object):
             for index, f_name in enumerate(files_to_change):
                 fsplit = f_name.split(self.file_del)
                 old_name = fsplit[-1]
+                if "." in old_name:
+                    old_name = old_name.split(".")[0]
                 if old_name in name_map:
                     old_dirs_set = fsplit[self.get_depth_to_base(fsplit[1:]):-1]
                     old_dirs = self.file_del.join(old_dirs_set)
