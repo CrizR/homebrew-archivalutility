@@ -67,20 +67,21 @@ class ArchiveUtility(object):
             for index, f_name in enumerate(files_to_change):
                 fsplit = f_name.split(self.file_del)
                 old_name = fsplit[-1]
+                extension = None
                 if "." in old_name:
-                    old_name = old_name.split(".")[0]
+                    split_name = old_name.split(".")
+                    old_name = split_name[0]
+                    extension = split_name[1]
                 if old_name in name_map:
                     old_dirs_set = fsplit[self.get_depth_to_base(fsplit[1:]):-1]
                     old_dirs = self.file_del.join(old_dirs_set)
-                    extension = ""
-                    if "." in old_name:
-                        split_name = old_name.split(".")
-                        old_name = split_name[0]
-                        extension = split_name[1]
                     new_name = name_map[old_name]
                     new_location = self.OUTPUT_FILE + self.file_del + old_dirs + self.file_del + new_name
                     if self.force:
-                        new_path = old_dirs + self.file_del + new_name + "." + extension
+                        if extension:
+                            new_path = old_dirs + self.file_del + new_name + "." + extension
+                        else:
+                            new_path = old_dirs + self.file_del + new_name
                         move(f_name, new_path)
                     else:
                         if old_dirs not in self.created_dirs:
