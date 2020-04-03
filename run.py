@@ -72,13 +72,21 @@ class ArchiveUtility(object):
                 if old_name in name_map:
                     old_dirs_set = fsplit[self.get_depth_to_base(fsplit[1:]):-1]
                     old_dirs = self.file_del.join(old_dirs_set)
+                    extension = ""
                     if "." in old_name:
-                        old_name = old_name.split(".")[0]
+                        split_name = old_name.split(".")
+                        old_name = split_name[0]
+                        extension = split_name[1]
                     new_name = name_map[old_name]
                     new_location = self.OUTPUT_FILE + self.file_del + old_dirs + self.file_del + new_name
                     if self.force:
+<<<<<<< HEAD
                         location = old_dirs + self.file_del + new_name
                         shutil.move(f_name, location)
+=======
+                        new_path = old_dirs + self.file_del + new_name + "." + extension
+                        move(f_name, new_path)
+>>>>>>> 3ed8ede... Deal with file extensions
                     else:
                         if old_dirs not in self.created_dirs:
                             self.create_directories(old_dirs_set)
@@ -217,7 +225,11 @@ if __name__ == '__main__':
                         required=False)
 
     parser.add_argument("-f", "--force", default=False,
+<<<<<<< HEAD
                         help="Renames the given directories files rather than copying them over")
+=======
+                        help="Renames the given directories files rather than copying them over", action='store_true')
+>>>>>>> 3ed8ede... Deal with file extensions
 
     args = parser.parse_args()
 
