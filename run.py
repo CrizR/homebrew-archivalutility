@@ -80,13 +80,8 @@ class ArchiveUtility(object):
                     new_name = name_map[old_name]
                     new_location = self.OUTPUT_FILE + self.file_del + old_dirs + self.file_del + new_name
                     if self.force:
-<<<<<<< HEAD
-                        location = old_dirs + self.file_del + new_name
-                        shutil.move(f_name, location)
-=======
                         new_path = old_dirs + self.file_del + new_name + "." + extension
                         move(f_name, new_path)
->>>>>>> 3ed8ede... Deal with file extensions
                     else:
                         if old_dirs not in self.created_dirs:
                             self.create_directories(old_dirs_set)
@@ -225,11 +220,7 @@ if __name__ == '__main__':
                         required=False)
 
     parser.add_argument("-f", "--force", default=False,
-<<<<<<< HEAD
-                        help="Renames the given directories files rather than copying them over")
-=======
                         help="Renames the given directories files rather than copying them over", action='store_true')
->>>>>>> 3ed8ede... Deal with file extensions
 
     args = parser.parse_args()
 
