@@ -42,6 +42,7 @@ class ArchiveUtility(object):
 
     def _run_with_csv(self):
         now = str(round(time.time() * 1000))
+        self.OUTPUT_FILE += "-" + now
         csvfile = open(self.csv_path, "r")
         csvfile.read(1)
         name_map = {}
@@ -67,6 +68,8 @@ class ArchiveUtility(object):
                 if old_name in name_map:
                     old_dirs_set = fsplit[self.get_depth_to_base(fsplit[1:]):-1]
                     old_dirs = self.file_del.join(old_dirs_set)
+                    if "." in old_name:
+                        old_name = old_name.split(".")[0]
                     new_name = name_map[old_name]
                     new_location = self.OUTPUT_FILE + self.file_del + old_dirs + self.file_del + new_name
                     if old_dirs not in self.created_dirs:
@@ -83,6 +86,7 @@ class ArchiveUtility(object):
 
     def _run_default(self):
         now = str(round(time.time() * 1000))
+        self.OUTPUT_FILE += "-" + now
         csv_filename = self.OUTPUT_FILE + "-" + now + ".csv"
         csvfile = open(csv_filename, "w+")
         try:
