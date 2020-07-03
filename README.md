@@ -4,14 +4,14 @@
 
 Steps: 
 
-#####1. Type the following in terminal
+####1. Type the following in terminal
 
 ```
 cd && git clone https://github.com/CrizR/archival-utility.git
 
 ```
 
-#####2. Add an alias to your bash_profile
+####2. Add an alias to your bash_profile
 
 ```
 vim ~/.bash_profile
@@ -31,7 +31,7 @@ now enter
 ```
 
 	
-#####3. Navigate to the directory above the directory you are planning to archive
+####3. Navigate to the directory above the directory you are planning to archive
 Example:
 
 ```
@@ -42,7 +42,7 @@ folder1 > directory_you_intend_to_archive >
 cd folder1
 
 ```
-#####4. Type in the following to execute
+####4. Type in the following to execute
 
 ```
    
