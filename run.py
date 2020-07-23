@@ -70,8 +70,16 @@ def handle_dropbox_download():
     Downloader(directory, destination, api_key).run()
 
 
+def handle_dropbox_file_name_retrieval():
+    directory = input("Enter the directory path for your files (i.e /SS 01 FAMILY/TESTIMONIALS/200702): ")
+    api_key = input("Enter the API Key needed to access this account: ")
+    input("Hit enter when you are ready to run.")
+    Downloader(directory, None, api_key).get_files()
+
+
 def run():
-    modes = {"Archival": handle_archival, "File Organize": handle_file_organizer, "Download": handle_dropbox_download}
+    modes = {"Archival": handle_archival, "File Organize": handle_file_organizer, "Download":
+        handle_dropbox_download, "Retrieve File Names": handle_dropbox_file_name_retrieval}
 
     print("Welcome to the Media Utility Tool")
     print("What would you like to do?")

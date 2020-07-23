@@ -73,3 +73,10 @@ class Downloader(object):
             thread = threading.Thread(target=self.download, args=(url, len(urls)))
             threads.append(thread)
             thread.start()
+
+    def get_files(self):
+        urls = self.get_urls()
+        with open("files.csv") as f:
+            for i, url in enumerate(urls):
+                Utils.print_progress_bar(i, len(urls), prefix="Retrieving File Names")
+                f.writelines(url[0] + "\n")
