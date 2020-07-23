@@ -76,7 +76,7 @@ class Downloader(object):
 
     def get_files(self):
         urls = self.get_urls()
-        with open("files.csv") as f:
+        with open("files.csv", "w+") as f:
             for i, url in enumerate(urls):
                 Utils.print_progress_bar(i, len(urls), prefix="Retrieving File Names")
                 f.writelines(url[0] + "\n")
